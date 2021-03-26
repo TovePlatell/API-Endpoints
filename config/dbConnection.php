@@ -1,11 +1,13 @@
 <?php
+ 
 
- class Connection{   
+  $db = "mysql:host=localhost;dbname=Ecommerce";
+  $user = "root";
+  $password = "";
+  
+  $pdo = new PDO($db, $user, $password);
+ 
 
-   public function dbConnect(){      // return pdo
-    return new PDO("mysql:host=localhost; dbname=ecommerce","root", "");  // this is our connection
 
 
- }
-} 
  ?> 

@@ -1,5 +1,6 @@
-<?php
+<?php 
 require_once "../../bootstrap.php";
+
 
 if(isset($_GET["token"])){
     $checkSession = new Sessions($pdo);
@@ -8,17 +9,30 @@ if(isset($_GET["token"])){
     $Array____checkToken = [
         "last_used" => "",
         "sessionuser_id" => "",
+        "role" => "",
     ];
 
     checkToken($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
     //echo checkToken($tokenExpireDate) ? "Already Logged in" : false;
 
-        if(isset($_GET["product_id"])){
+        if($checkToken["role"] == "admin"){
+
             $newCartItem = new Carts($pdo);
-            $newCartItem->addItemToCart($_GET["product_id"], $checkToken["sessionuser_id"]);
-        } 
+            $allCartItems = $newCartItem->getCartItems();
+            
+            print_r($allCartItems);
+
+        } else {
+            
+            $newCartItem = new Carts($pdo);
+            $allCartItems = $newCartItem->getCartItems($checkToken["sessionuser_id"]);
+            
+            print_r($allCartItems);
+            
+        }
         
 } else {
-            echo "please log in";
+    echo "please log in";        
 }
 
+?>

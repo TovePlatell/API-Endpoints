@@ -1,7 +1,8 @@
 <?php
 
 
-class User
+
+class Users
 {
 
     private $db_Connection;

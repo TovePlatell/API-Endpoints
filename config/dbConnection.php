@@ -1,6 +1,6 @@
 <?php
  
-
+  
   $db = "mysql:host=localhost;dbname=Ecommerce";
   $user = "root";
   $password = "";

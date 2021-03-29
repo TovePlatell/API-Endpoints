@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Tabellstruktur `cart`
 --
 
-CREATE TABLE `cart` (
+CREATE TABLE `carts` (
   `cart_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
@@ -175,7 +175,7 @@ ALTER TABLE `users`
 --
 -- Restriktioner för tabell `cart`
 --
-ALTER TABLE `cart`
+ALTER TABLE `carts`
   ADD CONSTRAINT `FKproductsId` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 
 --

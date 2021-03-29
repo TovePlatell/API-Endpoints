@@ -1,7 +1,6 @@
 <?php
 
-include('../../config/dbConnection.php');//database connection
-include('../../objects/Products.php');  
+require_once "../../bootstrap.php";
 
 
 if(isset($_GET['product_name']) && isset($_GET['product_desc']) && isset($_GET['price'])){
@@ -21,7 +20,7 @@ if(isset($_GET['product_name']) && isset($_GET['product_desc']) && isset($_GET['
 }else{
 
 
-
+ // checka admin token
 
 }
 

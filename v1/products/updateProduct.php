@@ -1,6 +1,6 @@
 <?php
-include('../../config/dbConnection.php');//database connection
-include('../../objects/Products.php');  
+
+require_once "../../bootstrap.php"; 
 
 
 if(isset($_GET["product_id"])){

@@ -11,7 +11,7 @@ if(isset($_GET["token"])){
         "sessionuser_id" => "",
     ];
 
-    checkToken($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
+    checkTokenExpired($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
     //echo checkToken($tokenExpireDate) ? "Already Logged in" : false;
 
         if(isset($_GET["product_id"])){

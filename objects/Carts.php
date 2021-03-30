@@ -67,7 +67,7 @@ function deleteItemInCart($cartproduct_id, $cartuser_id){
 
       $stm->execute();
 
-      return $stm->fetchAll();
+      return $stm->fetchAll(PDO::FETCH_OBJ);
   }
 
   

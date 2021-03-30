@@ -6,8 +6,8 @@ if(isset($_GET["token"])){
     $checkSession = new Sessions($pdo);
     $checkToken = $checkSession->checkToken($_GET["token"]);
 
-    checkToken($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
-    echo !checkToken($checkToken) ? "Already logged in" : false;
+    checkTokenExpired($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
+    echo !checkTokenExpired($checkToken) ? "Already logged in" : false;
     //echo checkToken($tokenExpireDate) ? "Already Logged in" : false;
 }
 
@@ -40,7 +40,13 @@ if(!isset($_GET["token"])) {
     ];
 
     // Om $userInfo är tom -> echo 
-    echo empty($userInfo) ? "Username not found" : false;
+   if(empty($userInfo)){ //echo empty($userInfo) //? 
+                            $newMessage = new Statuses;
+                            $newMessage->setHttpStatusCode(404);
+                            $newMessage->addMessage('User does not exists');
+                            $newMessage->send();
+   }
+                           //  : false;
 
     // Lagrar värdena från $userInfo i enskilda variabler
     if(!empty($userInfo)){
@@ -61,19 +67,21 @@ if(!isset($_GET["token"])) {
     
             $newSession->createSession($checkUser_id, $token, $token_expire);
     
-            echo "logged in";
+            $newMessage = new Statuses;
+                            $newMessage->setHttpStatusCode(202);
+                            $newMessage->addMessage('Logged in');
+                            $newMessage->send();
     
         } else {
-            echo "username or password is incorrect";
+
+            $newMessage = new Statuses;
+            $newMessage->setHttpStatusCode(409);
+            $newMessage->addMessage('Username or password does not match');
+            $newMessage->send();
         }
     }
     
-    
 
-
-
-    
-    
 } else {
     $array = [];
     !isset($_GET['user_name']) ? array_push($array, "Username cannot be empty") : false;

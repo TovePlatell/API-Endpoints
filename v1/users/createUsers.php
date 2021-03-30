@@ -11,7 +11,9 @@
         $hashed_password = password_hash($user_password, PASSWORD_DEFAULT);
         
         $user = new Users($pdo);
-        print_r(json_encode($user->createUser($_GET['user_name'], $_GET['user_email'],$hashed_password)));
+        $user->createUser($_GET['user_name'], $_GET['user_email'],$hashed_password);
+
+        
 
         
     }

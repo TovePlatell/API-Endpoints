@@ -10,12 +10,13 @@ if(isset($_GET['product_name']) && isset($_GET['product_desc']) && isset($_GET['
     $product_price = $_GET['price'];
 
     
-    echo "new updated products $product_name";
+   // echo "new updated products $product_name";
+                          
     
-    $product = new product($pdo);
+    $product = new products($pdo);
     $product->CreateProducts($product_name, $product_desc, $product_price);
 
-    echo "new updated products $product_name";
+    //echo "new updated products $product_name";
     
 }else{
 

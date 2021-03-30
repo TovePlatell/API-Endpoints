@@ -12,7 +12,7 @@ if(isset($_GET["token"])){
         "role" => "",
     ];
 
-    checkToken($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
+    checkTokenExpired($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
     //echo checkToken($tokenExpireDate) ? "Already Logged in" : false;
 
         if($checkToken["role"] == "admin"){
@@ -20,14 +20,22 @@ if(isset($_GET["token"])){
             $newCartItem = new Carts($pdo);
             $allCartItems = $newCartItem->getCartItems();
             
-            print_r($allCartItems);
+            $newMessage = new Statuses;
+            $newMessage->setHttpStatusCode(409);
+            $newMessage->addMessage('');
+            $newMessage->setData($allCartItems);
+            $newMessage->send();
 
         } else {
             
             $newCartItem = new Carts($pdo);
             $allCartItems = $newCartItem->getCartItems($checkToken["sessionuser_id"]);
             
-            print_r($allCartItems);
+            $newMessage = new Statuses;
+            $newMessage->setHttpStatusCode(409);
+            $newMessage->addMessage('');
+            $newMessage->setData($allCartItems);
+            $newMessage->send();
             
         }
         

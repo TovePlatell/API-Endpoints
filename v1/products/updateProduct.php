@@ -2,42 +2,76 @@
 
 require_once "../../bootstrap.php"; 
 
+if(isset($_GET["token"])){
+    $checkSession = new Sessions($pdo);
+    $checkToken = $checkSession->checkToken($_GET["token"]);
 
-if(isset($_GET["product_id"])){
-
-    $product_id = $_GET["product_id"];
-    $product_name = false;
-    $product_desc = false;
-    $product_price = false;
-    $changeProduct = "";
-    
-    if(isset($_GET["product_name"])){
-        $product_name = true;
-        $changeProduct .= "product_name = :product_name,";
+    if(empty($checkToken)){
+            $newMessage = new Statuses;
+            $newMessage->setHttpStatusCode(409);
+            $newMessage->addMessage('Not a valid token');
+            $newMessage->send();
     }
     
-    if(isset($_GET["product_desc"])){
-        $product_desc= true;
-        $changeProduct .= "product_desc = :product_desc,";
-    }
+    checkTokenExpired($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
 
-    if(isset($_GET["price"])){
-        $product_price = true;
-        $changeProduct .= "product_price = :product_price,";
-    }
+    if(!empty($checkToken) && $checkToken["role"] == 'admin'){
 
-    $changeProduct = rtrim($changeProduct, ",");
+        if(isset($_GET["product_id"])){
+            
+            $product_id = $_GET["product_id"];
+            $product_name = false;
+            $product_desc = false;
+            $product_price = false;
+            $changeProduct = "";
+            
+            if(isset($_GET["product_name"])){
+                $product_name = true;
+                $changeProduct .= "product_name = :product_name,";
+            }
+                
+                if(isset($_GET["product_desc"])){
+                    $product_desc= true;
+                    $changeProduct .= "product_desc = :product_desc,";
+                }
+                
+                if(isset($_GET["price"])){
+                    $product_price = true;
+                    $changeProduct .= "product_price = :product_price,";
+                }
 
-    $product_name === true ? $product_name = $_GET["product_name"] : false;  
 
-    $product_desc === true ? $product_desc = $_GET["product_desc"] : false;  
 
-    $product_price === true ? $product_price= $_GET["price"] : false;  
 
-    
-$product = new Product($pdo);
-$product->UpdateProduct($changeProduct, $product_name, $product_desc, $product_price, $product_id);
+här lägger jag array code
 
+
+
+                $changeProduct = rtrim($changeProduct, ",");
+                
+                $product_name === true ? $product_name = $_GET["product_name"] : false;  
+                
+                $product_desc === true ? $product_desc = $_GET["product_desc"] : false;  
+                
+                $product_price === true ? $product_price= $_GET["price"] : false;  
+                
+                
+                $product = new Products($pdo);
+                $product->UpdateProduct($changeProduct, $product_name, $product_desc, $product_price, $product_id);
+                
+            }
+        } else {
+
+            $newMessage = new Statuses;
+            $newMessage->setHttpStatusCode(405);
+            $newMessage->addMessage('You´re not admin!');
+            $newMessage->send();
+
+        }
 } else {
-    echo "error";
+
+    $newMessage = new Statuses;
+            $newMessage->setHttpStatusCode(409);
+            $newMessage->addMessage('Please log in!');
+            $newMessage->send();
 }

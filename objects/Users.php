@@ -13,9 +13,6 @@ class Users
         $this->db_Connection = $db;
     }
 
-
-
-
     
 
     function CreateUser($user_name_IN, $user_email_IN, $user_password_IN)
@@ -30,7 +27,10 @@ class Users
             if ($stm2->execute()) {
                 $rowCount = $stm2->rowCount();
                 if ($rowCount > 0) {
-                    echo "This user already exists";
+                    $newMessage = new Statuses;
+                            $newMessage->setHttpStatusCode(409);
+                            $newMessage->addMessage('User already exists!');
+                            $newMessage->send();
                     die();
 
                 } else {
@@ -45,7 +45,11 @@ class Users
                    
 
                     if ($stm->execute()) {
-                        echo "Create user succesfully!";
+
+                            $newMessage = new Statuses;
+                            $newMessage->setHttpStatusCode(201);
+                            $newMessage->addMessage('User created');
+                            $newMessage->send();
                         
                         die();
                     }
@@ -54,7 +58,10 @@ class Users
             }
         } else {
 
-            echo "You have to insert all fields!";
+            $newMessage = new Statuses;
+                            $newMessage->setHttpStatusCode(409);
+                            $newMessage->addMessage('You have to fill in all the fields!');
+                            $newMessage->send();
             die();
         }
     }
@@ -72,8 +79,17 @@ function DeleteUser($user_id){
 
      if($stm->rowCount() > 0){
 
-        echo "$user_id is removed";
-     } 
+        $newMessage = new Statuses;
+        $newMessage->setHttpStatusCode(200);
+        $newMessage->addMessage('User is removed');
+        $newMessage->send();     
+     }  else {
+
+        $newMessage = new Statuses;
+        $newMessage->setHttpStatusCode(404);
+        $newMessage->addMessage('Something went wrong trying to remove user');
+        $newMessage->send();     
+     }
     
 
 }
@@ -95,7 +111,15 @@ function UpdateUser($query, $user_name, $user_password, $user_email, $user_id){
         $stm->bindParam(":user_email", $user_email);
     }
 
-    $stm->execute();
+    
+
+    if($stm->execute()) {
+
+        $newMessage = new Statuses;
+        $newMessage->setHttpStatusCode(200);
+        $newMessage->addMessage('User updated');
+        $newMessage->send();
+    }
 
 }
 

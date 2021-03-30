@@ -2,33 +2,42 @@
 
 require_once "../../bootstrap.php"; 
 
-if(isset($_GET["token"])):
+if(isset($_GET["token"])){
     $checkSession = new Sessions($pdo);
     $checkToken = $checkSession->checkToken($_GET["token"]);
 
+    
     $Array____checkToken = [
         "last_used" => "",
         "sessionuser_id" => "",
     ];
-
-    checkToken($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
+    
     //echo checkToken($tokenExpireDate) ? "Already Logged in" : false;
-
-        if(isset($_GET["user_id"])){
-
-            if($_GET["user_id"] != $checkToken["sessionuser_id"]) {
-                echo "Wrong user id";
-            } elseif ($_GET["user_id"] === $checkToken["sessionuser_id"]){
-
-                
-                $user_id = $_GET["user_id"];
-                $user_name = false;
-                $user_password = false;
-                $user_email = false;
-                $query = "";
-                
-            if(isset($_GET["user_name"])){
-                $user_name = true;
+    if(empty($checkToken)){
+        $newMessage = new Statuses;
+            $newMessage->setHttpStatusCode(409);
+            $newMessage->addMessage('Not a valid token');
+            $newMessage->send();
+    }
+    
+    if(!empty($checkToken)) {
+        checkTokenExpired($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
+        
+        /*
+         * Vi börjar med att sätta in värdena som kan ändras till false eftersom att vi bara vill
+         * att värden som man vill ändra på ska gälla
+         * Ex: om det finns en $_GET metod i URL:en på t.ex $_GET["user_name"] så ändrar vi
+         * $user_name till true och uppdaterar sedan $query variabeln till något slags query tillägg.
+         * Om $user_name är satt till "true" så kommer queryn att ha ett tillägg på user_name = :user_name.
+         * Detta värde använder vi till SQL frågan
+         */
+        $user_name = false;
+        $user_password = false;
+        $user_email = false;
+        $query = "";
+        
+        if(isset($_GET["user_name"])){
+            $user_name = true;
                 $query .= "user_name = :user_name,";
             }
             
@@ -42,10 +51,23 @@ if(isset($_GET["token"])):
                 $query .= "user_email = :user_email,";
             }
 
+            /*
+             * Om alla variabler är false så vill vi stoppa processen och det gör vi genom följande funktion
+             */
             if($user_name == false && $user_password == false && $user_email == false) {
                 echo "Nothing to update";
-            } else {
+            } elseif (($user_name === true && strlen($_GET["user_name"]) < 1) || ($user_password === true && strlen($_GET["user_password"]) < 1) || ($user_email === true && strlen($_GET["user_email"]) < 1)) {
+                $array = [];
+                $user_name === true && strlen($_GET["user_name"]) < 1 ? array_push($array, "Username cannot be blank") : false;
+                $user_password === true && strlen($_GET["user_password"]) < 1 ? array_push($array, "Password cannot be blank") : false;
+                $user_email === true && strlen($_GET["user_email"]) < 1 ? array_push($array, "Email cannot be blank") : false;
 
+                $newMessage = new Statuses;
+                $newMessage->setHttpStatusCode(409);
+                $newMessage->addMessage($array);
+                $newMessage->send();
+            } else {
+                
                 
                 $query = rtrim($query, ",");
                 
@@ -61,19 +83,19 @@ if(isset($_GET["token"])):
                 }
                 
                 
-                
                 $user = new Users($pdo);
-                $user->UpdateUser($query, $user_name, $user_password, $user_email, $user_id);
+                $user->UpdateUser($query, $user_name, $user_password, $user_email, $checkToken["sessionuser_id"]);
             }
         }
             
-        } else {
-            echo "please log in";
-        }
+            
         
-        
-        
-endif; // samma sak if statement med curly brackets
+    } else {
+        $newMessage = new Statuses;
+            $newMessage->setHttpStatusCode(409);
+            $newMessage->addMessage('Please login');
+            $newMessage->send();
+    }
 /*     $user_id = "";
     $usern_name = "";
     $user_password = "";

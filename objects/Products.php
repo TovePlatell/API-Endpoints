@@ -2,7 +2,7 @@
 
 //include('../../config/dbConnection.php');//database connection
 
-class Product{
+class Products{
 
   //object properties
   
@@ -38,7 +38,10 @@ function createProducts($product_name_IN, $product_desc_IN, $product_price_IN){
 
   if($stm->execute()){
 
-    echo "Created product sucessfully";
+    $newMessage = new Statuses;
+                            $newMessage->setHttpStatusCode(201);
+                            $newMessage->addMessage('Product created');
+                            $newMessage->send();
     die();
   }
 }
@@ -53,9 +56,22 @@ function DeleteProduct($product_id){
   $stm->bindParam(":product_id_IN", $product_id);
   $stm->execute();
 
+
    if($stm->rowCount() > 0){
 
-      //echo "$product_id is removed";
+    $newMessage = new Statuses;
+    $newMessage->setHttpStatusCode(200);
+    $newMessage->addMessage('User is removed');
+    $newMessage->send();     
+
+ }  else {
+
+    $newMessage = new Statuses;
+    $newMessage->setHttpStatusCode(404);
+    $newMessage->addMessage('Something went wrong trying to remove user');
+    $newMessage->send();  
+
+   
    } 
   
 
@@ -86,12 +102,12 @@ function UpdateProduct($changeProduct, $product_name, $product_desc, $product_pr
 
 
 
-// anders kod
+
 function ShowAllProducts() {
   $sql = "SELECT product_id, product_name, product_desc, price FROM products";
   $stm = $this->db_Connection->prepare($sql);
   $stm->execute();
-  return json_encode($stm->fetchAll(PDO::FETCH_ASSOC));
+  return ($stm->fetchAll(PDO::FETCH_OBJ));
 }
 }
 

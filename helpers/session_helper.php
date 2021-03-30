@@ -1,7 +1,7 @@
 <?php 
-    function checkToken($token_time){
+    function checkTokenExpired($token_time){
         if(strtotime($token_time) < time()) {
-            echo "Token expired, plase log in again";
+            echo "Token expired, please log in again";
         } elseif((strtotime($token_time) - 1800) < time()) {
             return true;
         } else {

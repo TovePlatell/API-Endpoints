@@ -14,6 +14,8 @@ class Statuses {
 
         public function addMessage($message){
             $this->_messages[] = $message;
+
+            //this is the message that goes in the error codes
         }
 
         public function setData($data){
@@ -21,6 +23,7 @@ class Statuses {
         }
 
         public function send(){
+            
             header('Content-type: application/json;charset=utf-8');
 
                 http_response_code($this->_httpStatusCode);

@@ -13,9 +13,10 @@ if(isset($_GET["token"])){
             $newMessage->send();
     }
     
-    checkTokenExpired($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
+    if(!empty($checkToken)) {
+        checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false;
 
-    if(!empty($checkToken) && $checkToken["role"] == 'admin'){
+        if($checkToken->role == "admin"){
 
         if(isset($_GET["product_id"])){
             
@@ -39,12 +40,29 @@ if(isset($_GET["token"])){
                     $product_price = true;
                     $changeProduct .= "product_price = :product_price,";
                 }
+/*
+             * Om alla variabler är false så vill vi stoppa processen och det gör vi genom följande funktion
+             */
+            if($product_name== false && $product_desc== false && $product_price == false) {
 
+                $newMessage = new Statuses;
+                $newMessage->setHttpStatusCode(404);
+                $newMessage->addMessage('Nothing to update!');
+                $newMessage->send();
 
+                
+            } elseif (($product_name === true && strlen($_GET["product_name"]) < 1) || ($product_desc === true && strlen($_GET["product_desc"]) < 1) || ($product_price === true && strlen($_GET["price"]) < 1)) {
 
+                $array2 = [];
+                $product_name === true && strlen($_GET["product_name"]) < 1 ? array_push($array2, "productname cannot be blank") : false;
+                $product_desc === true && strlen($_GET["product_desc"]) < 1 ? array_push($array2, "product desc cannot be blank") : false;
+                $product_price === true && strlen($_GET["price"]) < 1 ? array_push($array2, "price cannot be blank") : false;
 
-här lägger jag array code
-
+                $newMessage = new Statuses;
+                $newMessage->setHttpStatusCode(409);
+                $newMessage->addMessage($array2);
+                $newMessage->send();
+            } else {
 
 
                 $changeProduct = rtrim($changeProduct, ",");
@@ -58,17 +76,37 @@ här lägger jag array code
                 
                 $product = new Products($pdo);
                 $product->UpdateProduct($changeProduct, $product_name, $product_desc, $product_price, $product_id);
+
+                $newMessage = new Statuses;
+                $newMessage->setHttpStatusCode(200);
+                $newMessage->addMessage('Sucessfully updated products');
+                $newMessage->setData(["productname" => $product_name, "productdesc" => $product_desc, "price" => $product_price]);
+                $newMessage->send();
+                exit;
                 
             }
-        } else {
+
+        } else{
 
             $newMessage = new Statuses;
             $newMessage->setHttpStatusCode(405);
-            $newMessage->addMessage('You´re not admin!');
+            $newMessage->addMessage('You have to specify product_id');
             $newMessage->send();
 
         }
+
 } else {
+
+    $newMessage = new Statuses;
+    $newMessage->setHttpStatusCode(405);
+    $newMessage->addMessage('You´re not admin!');
+    $newMessage->send();
+
+}
+
+}
+
+}else {
 
     $newMessage = new Statuses;
             $newMessage->setHttpStatusCode(409);

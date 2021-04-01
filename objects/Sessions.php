@@ -38,7 +38,7 @@ class Sessions {
         $stm = $this->db_Connection->prepare($sql);
         $stm->bindParam(":token", $token);
         $stm->execute();
-        return $stm->fetch();
+        return $stm->fetch(PDO::FETCH_OBJ);
     }
 
     public function updateSession($token){

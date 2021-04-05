@@ -1,15 +1,14 @@
 <?php
 
-
 class Carts
 {
-
+// db connection
     private $db_Connection;
     function __construct($db)
     {
         $this->db_Connection = $db;
 
-    }
+    }  
 
     function addItemToCart($product_id, $user_id){
         $sql = ("INSERT INTO carts (cartproduct_id, cartuser_id) VALUES(:product_id, :user_id)");
@@ -34,10 +33,10 @@ class Carts
       $stm->bindParam(":product_id", $product_id);
       $stm->execute();
 
-      $row = $stm->rowCount();
+      $row = $stm->rowCount();   //count the rows 
 
       if($row == 1){
-        return $stm->fetch(PDO::FETCH_OBJ); 
+        return $stm->fetch(PDO::FETCH_OBJ);  // return the row if it+s equal to 1 and returns it as a object 
       } else {
         return false;
       }
@@ -53,7 +52,7 @@ function deleteItemInCart($cart_id, $cartuser_id){
     $stm->bindParam(":cartuser_id", $cartuser_id);
     $stm->execute();
 
-     if($stm->rowCount() > 0){
+     if($stm->rowCount() > 0){  // counts the rows and return true if its less than 0 and the product is deleted
   
       return true;
 
@@ -74,7 +73,7 @@ function deleteItemSetInCart($cartproduct_id, $cartuser_id){
     $stm->bindParam(":cartuser_id", $cartuser_id);
     $stm->execute();
   
-     if($stm->rowCount() > 0){
+     if($stm->rowCount() > 0){  // counts the rows and return true if its less than 0 and the product where the specific ID is deleted
   
       return true;
 

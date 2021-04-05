@@ -39,14 +39,14 @@ if (isset($_GET["token"])) {
       } else {
 
          $newMessage = new Statuses;
-         $newMessage->setHttpStatusCode(404);
+         $newMessage->setHttpStatusCode(409);
          $newMessage->addMessage('Something went wrong trying to remove user');
          $newMessage->send();
       }
    }
 } else {
    $newMessage = new Statuses;
-   $newMessage->setHttpStatusCode(409);
+   $newMessage->setHttpStatusCode(401);
    $newMessage->addMessage('Please login');
    $newMessage->send();
 }

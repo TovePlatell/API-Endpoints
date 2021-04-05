@@ -19,6 +19,9 @@ require_once "../../bootstrap.php";
     } else if (isset($_REQUEST['REQUEST_METHOD']) === 'PATCH'){
         
     } else {
-        echo "Not allowed";
+        $newMessage = new Statuses;
+        $newMessage->setHttpStatusCode(401);
+        $newMessage->addMessage('Not allowed');
+        $newMessage->send();
     }
     

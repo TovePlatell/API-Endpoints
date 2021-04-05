@@ -2,13 +2,7 @@
 require_once "../../bootstrap.php";
 
 
-// varje gång jag lägger till token tecken får jag error - jag kna skriva token= blank och de funkar.... 
-//kan inte göra något om jag ej är inloggad
-
-
-
 if(isset($_GET["token"])){
-  
 
     $checkSession = new Sessions($pdo);
     $checkToken = $checkSession->checkToken($_GET["token"]);

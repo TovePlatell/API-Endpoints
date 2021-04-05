@@ -107,7 +107,7 @@ if (isset($_GET["token"])) {
     }
 } else {
     $newMessage = new Statuses;
-    $newMessage->setHttpStatusCode(409);
+    $newMessage->setHttpStatusCode(401);
     $newMessage->addMessage('Please login');
     $newMessage->send();
 }

@@ -35,7 +35,7 @@ if(isset($_GET["token"])){
             } else {
 
                 $newMessage = new Statuses;
-                $newMessage->setHttpStatusCode(200);
+                $newMessage->setHttpStatusCode(409);
                 $newMessage->addMessage("The user does not have this product in the cart");
                 $newMessage->send();
             }
@@ -54,7 +54,7 @@ if(isset($_GET["token"])){
             } else {
 
                 $newMessage = new Statuses;
-                $newMessage->setHttpStatusCode(200);
+                $newMessage->setHttpStatusCode(409);
                 $newMessage->addMessage("The user does not have this product in the cart");
                 $newMessage->send();
             } 

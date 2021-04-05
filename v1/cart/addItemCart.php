@@ -21,7 +21,6 @@ if(isset($_GET["token"])){
     if(!empty($checkToken)){
    checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false;
     
-    //echo checkToken($tokenExpireDate) ? "Already Logged in" : false;
 
         if(isset($_GET["product_id"])){
             $newCartItem = new Carts($pdo);
@@ -34,12 +33,11 @@ if(isset($_GET["token"])){
                     "product" => $checkProduct->product_name,
                     "description" => $checkProduct->product_desc,
                     "price" => $checkProduct->price
-                    /*"description" => $checkProduct["product_desc"],
-                    "price" => $checkProduct["price"] */
+                   
                 ];
 
                 $newMessage = new Statuses;
-                $newMessage->setHttpStatusCode(401);
+                $newMessage->setHttpStatusCode(200);
                 $newMessage->addMessage("Successfully added product to cart");
                 $newMessage->setData($array);
                 $newMessage->send();
@@ -58,7 +56,7 @@ if(isset($_GET["token"])){
 
             } else {
                 $newMessage = new Statuses;
-                $newMessage->setHttpStatusCode(401);
+                $newMessage->setHttpStatusCode(409);
                 $newMessage->addMessage('Product does not exist');
                 $newMessage->send();
                 exit;

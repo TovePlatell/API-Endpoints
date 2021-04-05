@@ -4,10 +4,10 @@ require_once "../../bootstrap.php";
 
 if(isset($_GET["token"])){
     $checkSession = new Sessions($pdo);
-    $checkToken = $checkSession->checkToken($_GET["token"]);
+    $checkToken = $checkSession->checkToken($_GET["token"]);  // check that the token is set
  
 
-    if(empty($checkToken)){
+    if(empty($checkToken)){                     // if not print out error message
         $newMessage = new Statuses;
             $newMessage->setHttpStatusCode(409);
             $newMessage->addMessage('Not a valid token');
@@ -15,7 +15,7 @@ if(isset($_GET["token"])){
     }
     
     if(!empty($checkToken)) {
-        checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false;
+        checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false; 
 
         if($checkToken->role == "admin"){
 
@@ -25,8 +25,7 @@ if(isset($_GET['product_name']) && isset($_GET['product_desc']) && isset($_GET['
     $product_desc = $_GET['product_desc'];
     $product_price = $_GET['price'];
 
-    
-   // echo "new updated products $product_name";
+
                           
     $product = new products($pdo);
     $trueOrFalse = $product->CreateProducts($product_name, $product_desc, $product_price);
@@ -42,9 +41,9 @@ if(isset($_GET['product_name']) && isset($_GET['product_desc']) && isset($_GET['
 
     $array = [];
 
-        !isset($_GET['product_name']) || strlen($_GET["product_name"]) < 1 ? array_push($array, 'pname cannot be empty') : false;
-        !isset($_GET['product_desc']) || strlen($_GET["product_desc"]) < 1 ? array_push($array, 'pemail cannot be empty') : false;
-        !isset($_GET['price']) || strlen($_GET["price"]) < 1 ? array_push($array, 'pr cannot be empty') : false;
+        !isset($_GET['product_name']) || strlen($_GET["product_name"]) < 1 ? array_push($array, 'product name cannot be empty') : false;
+        !isset($_GET['product_desc']) || strlen($_GET["product_desc"]) < 1 ? array_push($array, 'prpduct email cannot be empty') : false;
+        !isset($_GET['price']) || strlen($_GET["price"]) < 1 ? array_push($array, 'price cannot be empty') : false;
 
 
 
@@ -65,7 +64,7 @@ if(isset($_GET['product_name']) && isset($_GET['product_desc']) && isset($_GET['
 }
 } else {
     $newMessage = new Statuses;
-        $newMessage->setHttpStatusCode(409);
+        $newMessage->setHttpStatusCode(401);
         $newMessage->addMessage('Please login');
         $newMessage->send();
 }

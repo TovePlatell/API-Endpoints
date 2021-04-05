@@ -1,7 +1,5 @@
 <?php
 
-//include('../../config/dbConnection.php');//database connection
-
 class Products
 {
 
@@ -16,8 +14,7 @@ class Products
 
   function __construct($db)
   {
-
-    $this->db_Connection = $db;  //db är våran pdo koppling
+    $this->db_Connection = $db;  
   }
 
   // methods

@@ -1,16 +1,16 @@
 # How to use
 
-v1/Users/createUsers -> Have to create an account
-v1/sessions/session -> To login
-A token is created after logged in -> use token in a logged-in stage to get access to
+v1/Users/createUsers -> Have to create an account \
+v1/sessions/session -> To login \
+A token is created after logged in -> use token in a logged-in stage to get access to \
 
-users -> updateUser, deleteUser
-products -> need to ne logged in as an admin to acess createProducts, updateProduct, deleteProducs
-carts -> addItemCart, deleteItemCart, showAllCartItem
+users -> updateUser, deleteUser \
+products -> need to ne logged in as an admin to acess createProducts, updateProduct, deleteProducs \
+carts -> addItemCart, deleteItemCart, showAllCartItem \
 
-INCLUDING sessionhelper to see if token expired or not, if 30 min remains while logged in - expire time updates
-Endpoints holds all the errors and messages
-Json encode is included in all endpoints through the function Send in Statues.
+INCLUDING sessionhelper to see if token expired or not, if 30 min remains while logged in - expire time updates \
+Endpoints holds all the errors and messages \
+Json encode is included in all endpoints through the function Send in Statues. \
 
 ## ErrorCodes from https://httpstatuses.com/
 

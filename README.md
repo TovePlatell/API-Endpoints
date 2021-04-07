@@ -1,16 +1,14 @@
 # How to use
 
-v1/Users/createUsers -> Have to create an account \
-v1/sessions/session -> To login \
-A token is created after logged in -> use token in a logged-in stage to get access to \
-
-users -> updateUser, deleteUser \
-products -> need to ne logged in as an admin to acess createProducts, updateProduct, deleteProducs \
-carts -> addItemCart, deleteItemCart, showAllCartItem \
-
-INCLUDING sessionhelper to see if token expired or not, if 30 min remains while logged in - expire time updates \
-Endpoints holds all the errors and messages \
-Json encode is included in all endpoints through the function Send in Statues. \
+v1/Users/createUsers -> Have to create an account\
+v1/sessions/session -> To login\
+A token is created after logged in -> use token in a logged-in stage to get access to\
+users -> updateUser, deleteUser\
+products -> need to ne logged in as an admin to acess createProducts, updateProduct, deleteProducs\
+carts -> addItemCart, deleteItemCart, showAllCartItem\
+INCLUDING sessionhelper to see if token expired or not, if 30 min remains while logged in - expire time updates\
+Endpoints holds all the errors and messages\
+Json encode is included in all endpoints through the function Send in Statues.
 
 ## ErrorCodes from https://httpstatuses.com/
 
@@ -19,7 +17,7 @@ Json encode is included in all endpoints through the function Send in Statues. \
 401 - Unauthorized //  Log in   \
 409 - Conflicts // not a valid token  \
 405 - Method Not Found \
-500 - Internal Server Error \
+500 - Internal Server Error
 
 ### Database
 

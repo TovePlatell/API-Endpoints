@@ -14,10 +14,10 @@ if(isset($_GET["token"])){
             $newMessage->send();
     }
     
-    if(!empty($checkToken)) {
-        checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false; 
+    if(!empty($checkToken)) {           // if not empty check when token is lastused if true update token
+        checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false; // call a method, access a property on the object of a class
 
-        if($checkToken->role == "admin"){
+        if($checkToken->role == "admin"){  // check wheather you have the permission to create if you´re an admin
 
 if(isset($_GET['product_name']) && isset($_GET['product_desc']) && isset($_GET['price'])){
 
@@ -28,12 +28,12 @@ if(isset($_GET['product_name']) && isset($_GET['product_desc']) && isset($_GET['
 
                           
     $product = new products($pdo);
-    $trueOrFalse = $product->CreateProducts($product_name, $product_desc, $product_price);
+    $trueOrFalse = $product->CreateProducts($product_name, $product_desc, $product_price);  // return statement return true or false
 
     $newMessage = new Statuses;
     $newMessage->setHttpStatusCode(201);
     $newMessage->addMessage('Product created');
-    $newMessage->setData(["Productname" => $product_name,"Productdesc" => $product_desc, "price" => $product_price]);
+    $newMessage->setData(["Productname" => $product_name,"Productdesc" => $product_desc, "price" => $product_price]); // assign values to the keys of an array
     $newMessage->send();
     exit;
 
@@ -41,6 +41,7 @@ if(isset($_GET['product_name']) && isset($_GET['product_desc']) && isset($_GET['
 
     $array = [];
 
+        
         !isset($_GET['product_name']) || strlen($_GET["product_name"]) < 1 ? array_push($array, 'product name cannot be empty') : false;
         !isset($_GET['product_desc']) || strlen($_GET["product_desc"]) < 1 ? array_push($array, 'prpduct email cannot be empty') : false;
         !isset($_GET['price']) || strlen($_GET["price"]) < 1 ? array_push($array, 'price cannot be empty') : false;

@@ -8,38 +8,32 @@ if (isset($_GET["token"])) {
 
     checkTokenExpired($checkToken["last_used"]) ? $checkSession->updateSession($_GET["token"]) : false;
     echo !checkTokenExpired($checkToken) ? "Already logged in" : false;
-    //echo checkToken($tokenExpireDate) ? "Already Logged in" : false;
+    
 }
 
 if (!isset($_GET["token"])) {
 
     if (isset($_GET['user_name']) && isset($_GET['user_password'])) {
 
-        // Värden från URL:en // Get metoden
+         // Get method - gets the value from URL
         $user_name = $_GET["user_name"];
         $user_password = $_GET["user_password"];
 
-        // Sätter igång sessions classen
+        // Starts the session class
         $newSession = new Sessions($pdo);
 
-        /* Vi returnar värdet från checkUser funktionen och lagrar  
-    * den  i $userInfo ---> returnar 1 row eller ingenting.
-     * Om den returnerar 1 row så blir det en array.
-     */
-
+        /*  we return the value from checkUser function and store it in Userinfo --> and it will return 1 row or nothing. If it get´s returned --> array 
+        */
         $userInfo = $newSession->checkUser($user_name);
-
-        /*
-     * Eftersom att $userInfo har en return på en Fetch som returnerar en array
-     * så kommer $userInfo att uppdateras till en array
-     */
-        $NyaUserInfo = [
+     // Because of $userInfo has a return on a fetch that returns an array, $userInfo will update to an arrayEftersom att $userInfo har en 
+     
+     /*  ex... $NyaUserInfo = [
             "user_name" => "tove",
             "user_password" => "hashed",
             "user_email" => "tove@tove.se"
-        ];
+        ];*/
 
-        // Om $userInfo är tom -> echo 
+        // If $userInfo is empty -> echo 
         if (empty($userInfo)) { //echo empty($userInfo) //? 
             $newMessage = new Statuses;
             $newMessage->setHttpStatusCode(404);
@@ -48,22 +42,19 @@ if (!isset($_GET["token"])) {
         }
         //  : false;
 
-        // Lagrar värdena från $userInfo i enskilda variabler
+        // Stores the values from userInfo into seperates variables
         if (!empty($userInfo)) {
             $checkUser_name = $userInfo["user_name"];
             $checkUser_password = $userInfo["user_password"];
             $checkUser_id = $userInfo["user_id"];
 
-            // Jämför $user_pasword (det som en user skriver in) med det
-            // hashade lösenordet från databasen
+            // compare user_password that the user is typing with the hashed password from the databaseJämför $user_pasword
             if (password_verify($user_password, $checkUser_password)) {
-
-                /*
-             * skapar binary bytes > konverterar till hexadecimal >
-             * konverterar till bokstäver
-             */
+            
+             // creates binary bytes - > converts to hexadecimal - > that converts to letters
+            
                 $token = base64_encode(bin2hex(openssl_random_pseudo_bytes(24)) . time());
-                $token_expire = 3600;
+                $token_expire = 3600; 
 
                 $newSession->createSession($checkUser_id, $token, $token_expire);
 
@@ -71,7 +62,7 @@ if (!isset($_GET["token"])) {
                 $newMessage = new Statuses;
                 $newMessage->setHttpStatusCode(202);
                 $newMessage->addMessage('Logged in');
-                $newMessage->setData($token);  // [] för att skriva ut den som array
+                $newMessage->setData($token);  
                 $newMessage->send();
             } else {
 
@@ -83,7 +74,7 @@ if (!isset($_GET["token"])) {
         }
     } else {
         $array = [];
-
+           // check whether username, password isset, else error message 
         !isset($_GET['user_name']) ? array_push($array, "Username cannot be empty") : false;
         !isset($_GET['user_password']) ? array_push($array, "Password cannot be empty") : false;
 

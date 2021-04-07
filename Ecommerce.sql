@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Värd: localhost
--- Tid vid skapande: 26 mars 2021 kl 06:36
+-- Tid vid skapande: 07 apr 2021 kl 10:11
 -- Serverversion: 10.4.17-MariaDB
 -- PHP-version: 8.0.1
 
@@ -24,13 +24,13 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur `cart`
+-- Tabellstruktur `carts`
 --
 
 CREATE TABLE `carts` (
   `cart_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `cartproduct_id` int(11) DEFAULT NULL,
+  `cartuser_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -51,13 +51,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `product_name`, `product_desc`, `price`) VALUES
-(2, '\"food\"', '\"meet\"', '39'),
-(3, 'Play-doh', 'mulit-color', '39'),
-(4, 'Play-doh', 'mulit-color', '39'),
-(5, 'Play-doh', 'mulit-color', '39'),
-(6, 'play-doh', 'multi-color', '39'),
-(7, 'play-doh', 'multi-color', '39'),
-(8, '\"shoes\"', '\"size\"', '\"10\"');
+(11, 'car', 'blue', '20'),
+(12, 'car2', 'blue2', '10'),
+(13, 'car3', 'blue3', '15');
 
 -- --------------------------------------------------------
 
@@ -77,7 +73,11 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `sessionuser_id`, `token`, `last_used`) VALUES
-(1, 35, 'NmUyMjJmYmNkZTE1YjdmYTFjMzU2NTAxMWIzYjEwNGMyYjMwZGNiZDBlNDE2MjkwMTYxNjY2OTEyNw==', '2021-03-25 11:45:27');
+(32, 35, 'NjNiZTNhNDZkNjI0Yjg5MmFhNjEzMTdmNThlMzc1Mzg0MGQ3YzgyMDQyNGYxYWI0MTYxNzI3NTI0OQ==', '2021-04-01 14:07:29'),
+(33, 35, 'OWJhNDRhMGZjMTIyZGE2ODU0Nzk4ZDhmOGY3OWIyNTA5YjdiMzEyYTgxMmYyZTQyMTYxNzI3Njg5MQ==', '2021-04-01 14:34:51'),
+(34, 35, 'YTgzZDRhZGRkOWVkZGY3ZDQxYTc0MDdjM2Y5MWE3ODQzM2EzZjlhMmMwOTJiYjQzMTYxNzI3NzA1NQ==', '2021-04-01 14:37:35'),
+(35, 35, 'YzI2MWZmMmIzODIxNTc1Y2FiODA4MDhiZWY4MWUxYWFmNzkyZGZiYzAwMjg4ZjBiMTYxNzI3NzA2NQ==', '2021-04-01 15:40:26'),
+(36, 35, 'Nzc5NmJlNzhmZjg0ZWYwZDY3OGVkNTdhNjY5NDdkYzUyMjgyMWMzMzhlMjhhODkxMTYxNzcxNTE0NQ==', '2021-04-06 16:19:05');
 
 -- --------------------------------------------------------
 
@@ -89,36 +89,30 @@ CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `user_name` varchar(50) NOT NULL,
   `user_password` varchar(255) NOT NULL,
-  `user_email` varchar(100) DEFAULT NULL
+  `user_email` varchar(100) DEFAULT NULL,
+  `role` varchar(50) NOT NULL DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumpning av Data i tabell `users`
 --
 
-INSERT INTO `users` (`user_id`, `user_name`, `user_password`, `user_email`) VALUES
-(16, '123', '$2y$10$fUBCUHVcphlWILjFKNPTzOIXztZr/pk9OJ8x/dWNdD4Oc4Lkbdibu', 'nicole@gmail.com'),
-(28, 'william', '123456', 'william@gmail.com'),
-(29, 'william', '123456', 'hej@gmail.com'),
-(30, 'user_name_IN', 'user_password_IN', 'user_email_IN'),
-(31, 'hej', 'noll', 'tjena@gmail.com'),
-(32, '\"tove\"', '\"tove@tove.se\"', '\"123\"'),
-(33, '\"nicklas\"', '\"hej\"', '\"nicklas@hej.se'),
-(34, 'tove', '123', 'tove@tove.se'),
-(35, 'tove1', '$2y$10$FQKOY6RyRUMVTWIzJ71w4u6YxFgxwpMVT8JnWW15cKzqo7AwwJE5a', 'tove1@tove.se');
+INSERT INTO `users` (`user_id`, `user_name`, `user_password`, `user_email`, `role`) VALUES
+(35, 'tove', '$2y$10$FQKOY6RyRUMVTWIzJ71w4u6YxFgxwpMVT8JnWW15cKzqo7AwwJE5a', 'tove@tove.se', 'admin'),
+(42, 'tove1', '$2y$10$mHo2bR2p.tjHHXjzw/.H8uE6y63ruPrrrbu6bX5LSvrmTxjf1kdeq', 'tove1@gmail.com', 'user'),
+(48, 'tove2', '$2y$10$4iMxZqKXmLyEyzk3r0KdV.7DShQaLxcrSvtXqoxHuge.jwwVY4KOW', 'tove2@gmail.com', 'user');
 
 --
 -- Index för dumpade tabeller
 --
 
 --
--- Index för tabell `cart`
+-- Index för tabell `carts`
 --
-ALTER TABLE `cart`
+ALTER TABLE `carts`
   ADD PRIMARY KEY (`cart_id`),
-  ADD UNIQUE KEY `user_id` (`user_id`),
-  ADD UNIQUE KEY `product_id` (`product_id`,`user_id`),
-  ADD UNIQUE KEY `product_id_2` (`product_id`);
+  ADD KEY `cartproduct_id` (`cartproduct_id`),
+  ADD KEY `cartuser_id` (`cartuser_id`);
 
 --
 -- Index för tabell `products`
@@ -145,38 +139,39 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT för tabell `cart`
+-- AUTO_INCREMENT för tabell `carts`
 --
-ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `carts`
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT för tabell `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT för tabell `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT för tabell `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- Restriktioner för dumpade tabeller
 --
 
 --
--- Restriktioner för tabell `cart`
+-- Restriktioner för tabell `carts`
 --
 ALTER TABLE `carts`
-  ADD CONSTRAINT `FKproductsId` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
+  ADD CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`cartproduct_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `carts_ibfk_2` FOREIGN KEY (`cartuser_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Restriktioner för tabell `sessions`

@@ -29,8 +29,6 @@ class Products
     $stm->bindParam(":product_desc_IN", $product_desc_IN);
     $stm->bindParam(":product_price_IN", $product_price_IN);
 
-    //return $stm->execute();
-
     if ($stm->execute()) {
 
       return true;
@@ -85,7 +83,7 @@ class Products
     $sql = "SELECT product_id, product_name, product_desc, price FROM products";
     $stm = $this->db_Connection->prepare($sql);
     $stm->execute();
-    return ($stm->fetchAll(PDO::FETCH_OBJ));   // print_r för att se på direkten vad som kommer att hämta  
+    return ($stm->fetchAll(PDO::FETCH_OBJ));   
 
 
   }

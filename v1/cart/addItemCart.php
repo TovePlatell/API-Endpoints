@@ -5,11 +5,6 @@ if(isset($_GET["token"])){
     $checkSession = new Sessions($pdo);
     $checkToken = $checkSession->checkToken($_GET["token"]);
 
-    $Array____checkToken = [
-        "last_used" => "",
-        "sessionuser_id" => "",
-    ];
-
     if(empty($checkToken)){
         $newMessage = new Statuses;
         $newMessage->setHttpStatusCode(409);
@@ -19,7 +14,7 @@ if(isset($_GET["token"])){
 } 
 
     if(!empty($checkToken)){
-   checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false;
+     checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false; // check
     
 
         if(isset($_GET["product_id"])){
@@ -27,14 +22,15 @@ if(isset($_GET["token"])){
             $checkProduct = $newCartItem->checkProduct($_GET["product_id"]);
             
             if($checkProduct){
-             $trueOrFalse =  $newCartItem->addItemToCart($_GET["product_id"], $checkToken->sessionuser_id); // genom så hämtar från en std class..  hade vi [] så vill den hämta från en array
+             $trueOrFalse =  $newCartItem->addItemToCart($_GET["product_id"], $checkToken->sessionuser_id); 
+
                  if($trueOrFalse){
-                $array = [
+                    $array = [
                     "product" => $checkProduct->product_name,
                     "description" => $checkProduct->product_desc,
                     "price" => $checkProduct->price
-                   
-                ];
+             
+                 ];
 
                 $newMessage = new Statuses;
                 $newMessage->setHttpStatusCode(200);
@@ -48,7 +44,6 @@ if(isset($_GET["token"])){
                 $newMessage = new Statuses;
                 $newMessage->setHttpStatusCode(500);
                 $newMessage->addMessage("Something went wrong");
-                //$newMessage->setData($array);
                 $newMessage->send();
                 exit;
 
@@ -56,7 +51,7 @@ if(isset($_GET["token"])){
 
             } else {
                 $newMessage = new Statuses;
-                $newMessage->setHttpStatusCode(409);
+                $newMessage->setHttpStatusCode(40);
                 $newMessage->addMessage('Product does not exist');
                 $newMessage->send();
                 exit;

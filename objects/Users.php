@@ -2,7 +2,6 @@
 
 class Users
 {
-
     private $db_Connection;
 
     function __construct($db)
@@ -10,7 +9,6 @@ class Users
         $this->db_Connection = $db;
     }
   
-    // denna funktion funkar
 
     function CreateUser($user_name, $user_email, $user_password) {
         if (!empty($user_name) && !empty($user_email) && !empty($user_password)) {  
@@ -41,7 +39,6 @@ class Users
     }
             
 
-
     function DeleteUser($user_id)
     {
 
@@ -69,7 +66,7 @@ class Users
         $stm = $this->db_Connection->prepare($sql);
         $stm->bindParam(":user_id", $user_id);
 
-        if ($user_name != false) {
+        if ($user_name != false) {    
             $stm->bindParam(":user_name", $user_name);
         }
 
@@ -81,19 +78,12 @@ class Users
             $stm->bindParam(":user_email", $user_email);
         }
 
-
-
         if ($stm->execute()) {
 
             return true;
 
-            /* $newMessage = new Statuses;
-            $newMessage->setHttpStatusCode(200);
-            $newMessage->addMessage('User updated');
-            $newMessage->send(); */
         }else{
 
-            
             return false;
         }
     }

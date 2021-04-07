@@ -12,8 +12,10 @@
 
         $hashed_password = password_hash($user_password, PASSWORD_DEFAULT);   //creates a new hashed password
         
+        
+        // assigns a new instance of class USERS
         $user = new Users($pdo);  
-        $trueOrFalse = $user->createUser($_GET['user_name'], $_GET['user_email'],$hashed_password);
+        $trueOrFalse = $user->createUser($_GET['user_name'], $_GET['user_email'],$hashed_password); // using object operator to acess instance variable CreateUser and assign the value to createuser(username, email, password)
 
         if($trueOrFalse){
             $newMessage = new Statuses;
@@ -31,7 +33,7 @@
             $newMessage = new Statuses;
             $newMessage->setHttpStatusCode(201);
             $newMessage->addMessage('User created');
-            $newMessage->setData($array3);
+            $newMessage->setData($array3);  // created array above to make the message code cleaner
             $newMessage->send();
         }
 
@@ -39,7 +41,7 @@
     } else {
 
         $array = [];
-
+            // check whether username, email, password isset, else error message 
         !isset($_GET['user_name']) || strlen($_GET["user_name"]) < 1 ? array_push($array, 'Username cannot be empty') : false;
         !isset($_GET['user_email']) || strlen($_GET["user_email"]) < 1 ? array_push($array, 'Useremail cannot be empty') : false;
         !isset($_GET['user_password']) || strlen($_GET["user_password"]) < 1 ? array_push($array, 'Userpassword cannot be empty') : false;

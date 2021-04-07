@@ -6,13 +6,8 @@ if (isset($_GET["token"])) {
 
     $checkSession = new Sessions($pdo);
     $checkToken = $checkSession->checkToken($_GET["token"]);
-    // $Array____checkToken = [
-    // "last_used" => "",
-    //  "sessionuser_id" => "",
-    //  ];
-
-    
-    if (empty($checkToken)) {
+  
+    if (empty($checkToken)) { // check if the token is in url or not
 
         $newMessage = new Statuses;
         $newMessage->setHttpStatusCode(409);
@@ -24,13 +19,10 @@ if (isset($_GET["token"])) {
         checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false;
 
         /*
-         * Vi börjar med att sätta in värdena som kan ändras till false eftersom att vi bara vill
-         * att värden som man vill ändra på ska gälla
-         * Ex: om det finns en $_GET metod i URL:en på t.ex $_GET["user_name"] så ändrar vi
-         * $user_name till true och uppdaterar sedan $query variabeln till något slags query tillägg.
-         * Om $user_name är satt till "true" så kommer queryn att ha ett tillägg på user_name = :user_name.
-         * Detta värde använder vi till SQL frågan
+         * We begin with adding the values that can be change to false beacuse we only want the values you want to change to be valid.
+         * ex: if there is a $_GET method in the url - ex. $_GET['user_name'] we will change $user_name to true and update the $query variable. If $user_name isset to true the query have an addition on user_name = :user_name and this value will be used in the SQL query*
          */
+        
         $user_name = false;
         $user_password = false;
         $user_email = false;
@@ -49,13 +41,10 @@ if (isset($_GET["token"])) {
         if (isset($_GET["user_email"])) {
             $user_email = true;
             $query .= "user_email = :user_email,";
-        }
-
-        /*
-             * Om alla variabler är false så vill vi stoppa processen och det gör vi genom följande funktion
-             */
+        }    
+         // If all variables are false we would like to stop the process and that we do through following:
+    
         if ($user_name == false && $user_password == false && $user_email == false) {
-
 
             $newMessage = new Statuses;
             $newMessage->setHttpStatusCode(409);
@@ -74,6 +63,7 @@ if (isset($_GET["token"])) {
             $newMessage->setHttpStatusCode(409);
             $newMessage->addMessage($array);
             $newMessage->send();
+
         } else {
 
 

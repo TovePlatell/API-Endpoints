@@ -5,13 +5,8 @@ require_once "../../bootstrap.php";
 if(isset($_GET["token"])){
 
     $checkSession = new Sessions($pdo);
-    $checkToken = $checkSession->checkToken($_GET["token"]);
+    $checkToken = $checkSession->checkToken($_GET["token"]); // 
 
-    $Array____checkToken = [
-        "last_used" => "",
-        "sessionuser_id" => "",
-        "role" => "",
-    ];
 
     if(empty($checkToken)){
         $newMessage = new Statuses;
@@ -21,10 +16,10 @@ if(isset($_GET["token"])){
         exit;
 } 
 
-    checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false;  // std class är en array i en array
-    //echo checkToken($tokenExpireDate) ? "Already Logged in" : false;
+    checkTokenExpired($checkToken->last_used) ? $checkSession->updateSession($_GET["token"]) : false;  // std class is an array inside an array 
+   
 
-        if($checkToken->role == "admin"){   
+        if($checkToken->role == "admin"){   // check whether you´re admin or not
 
             $newCartItem = new Carts($pdo);
             $allCartItems = $newCartItem->getCartItems();
